@@ -1,0 +1,45 @@
+.form-container {
+  position: absolute;
+  transition: all 0.8s ease-in-out;
+  bottom: 1px;
+  height: 25%;
+}
+
+.form-container.expanded {
+  top: 0;
+  height: 100%;
+  min-height: fit-content;
+  padding-top: 9px;
+  margin: auto auto;
+}
+
+@media (min-width: 992px) {
+  .form-container.expanded {
+    height: auto;
+  }
+  .form-container{
+    bottom: 15px;
+  }
+  .form-container.collapsed {
+    top: auto;
+    height: auto;
+    
+  }
+}
+
+@media(max-width:500px){
+  .vehical_list{
+    position:fixed;
+    bottom:0;
+  }
+}
+@media(min-width:500px){
+  .vehical_list{
+    bottom: 0;
+    position: absolute;
+    transform-box: border-box;
+    margin: auto auto;
+    left: 50%;
+    transform: translate(-50%, -100%);
+  }
+}

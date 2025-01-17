@@ -1,0 +1,49 @@
+/* Floating animation for background */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Cloud shapes */
+.cloud {
+  position: absolute;
+  background: white;
+  opacity: 0.8;
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.cloud-1 {
+  width: 100px;
+  height: 60px;
+  top: 20%;
+  left: 10%;
+  animation-duration: 10s;
+}
+
+.cloud-2 {
+  width: 150px;
+  height: 90px;
+  top: 30%;
+  right: 15%;
+  animation-duration: 12s;
+}
+
+.cloud-3 {
+  width: 80px;
+  height: 50px;
+  bottom: 40%;
+  left: 30%;
+  animation-duration: 14s;
+}
