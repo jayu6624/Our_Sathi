@@ -103,11 +103,14 @@ import { ArrowRight, Lock, Mail } from "lucide-react";
 import { UserDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false); // State for success message
   const { user, setuser } = useContext(UserDataContext);
   const navigate = useNavigate();
 
@@ -118,30 +121,40 @@ const UserLogin = () => {
       password: password,
     };
 
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/users/login`,
-      newuser
-    );
-    if (response.status === 200) {
-      const data = response.data;
-      setuser(data.user);
-      localStorage.setItem("token", JSON.stringify(response.data.token));
-      navigate("/start");
-      console.log("login success");
-    }
-
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/login`,
+        newuser
+      );
+      if (response.status === 200) {
+        const data = response.data;
+        setuser(data.user);
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        toast.success("Login successful!"); // Toast notification
+        setLoginSuccess(true); // Show success message
+        setTimeout(() => {
+          setLoginSuccess(false); // Hide success message after 3 seconds
+          navigate("/start");
+        }, 3000);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error("Invalid credentials. Please try again."); // Invalid user toast notification
+      } else {
+        toast.error("An error occurred. Please try again later.");
+      }
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
     <div className="h-full w-full bg-gradient-to-br bg-white flex items-center justify-center p-4 align-middle">
-      <div className="bg-white w-full  justify-center rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden">
-        <div className="bg-white w-full  h-[100vh] rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden ">
-          <div className=" absolute justify-start items-center m-2 ">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <div className="bg-white w-full justify-center rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden">
+        <div className="bg-white w-full h-[100vh] rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden ">
+          <div className="absolute justify-start items-center m-2 ">
             <img
               className="backimg w-16 sm:w-20 bg-hide lg:pt-6 lg:ml-6 lg:w-28"
               src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
@@ -151,20 +164,18 @@ const UserLogin = () => {
           {/* Left side - Form */}
           <div className="w-full md:w-1/2 p-8 md:p-12 my-auto">
             <div className="space-y-6 my-auto items-center justify-center">
-              {/* Traffic Light Logo */}
-
               <form
                 onSubmit={handleSubmit}
-                className=" lg:text-2xl space-y-6 mt-4 lg:w-[80%] mx-auto  "
+                className="lg:text-2xl space-y-6 mt-4 lg:w-[80%] mx-auto"
               >
                 <div>
-                  <h2 className="lg:text-3xl text-xl font-bold flex justify-center  text-gray-900 ">
+                  <h2 className="lg:text-3xl text-xl font-bold flex justify-center text-gray-900">
                     Welcome to Login page
                   </h2>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-lg font-medium  text-gray-700 mt-10 mb-2">
+                    <label className="block text-lg font-medium text-gray-700 mt-10 mb-2">
                       User Email
                     </label>
                     <div className="mt-1 relative">
@@ -249,58 +260,19 @@ const UserLogin = () => {
                     </>
                   </Link>
                 </div>
-
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200" />
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">
-                      Or continue with
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all"
-                >
-                  <img
-                    src="https://image.similarpng.com/very-thumbnail/2021/09/Logo-Search-Google--on-transparent-background-PNG.pnghttps://image.similarpng.com/very-thumbnail/2021/09/Logo-Search-Google--on-transparent-background-PNG.png"
-                    alt="Google"
-                    className="h-5 w-5 mr-2"
-                  />
-                  Sign in with Google
-                </button>
               </form>
-              <p className="text-center text-sm text-gray-600">
-                Don't have an account?{" "}
-                <Link
-                  to="/usersignup"
-                  className="font-medium text-red-600 hover:text-red-500"
-                >
-                  Create one now
-                </Link>
-              </p>
             </div>
           </div>
 
           {/* Right side - Traffic Lights Image */}
           <div className="hidden md:block w-1/2 relative overflow-hidden">
-            {/* Dark overlay */}
             <div className="absolute inset-0 bg-black bg-opacity-20 z-10"></div>
-
-            {/* Traffic lights themed background */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-transparent to-gray-900 z-20"></div>
-
-            {/* Main image */}
             <img
               src="https://media.istockphoto.com/id/92272747/photo/traffic-light-on-street-with-red-signal-lit-up.jpg?s=612x612&w=0&k=20&c=_Vd6TFuZDjISe3HbQ0cl46pvkg8D4sTK9pKxB26Wxpo="
               alt="Traffic lights at night"
               className="w-full h-full object-cover animate-fade-in"
             />
-
-            {/* Decorative elements */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 text-center text-white">
               <div className="flex flex-col items-center space-y-4">
                 <h3 className="text-4xl font-bold">Uber</h3>

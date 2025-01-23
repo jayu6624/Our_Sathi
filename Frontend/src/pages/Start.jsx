@@ -223,11 +223,7 @@
 // export default Start;
 
 import React, { useState, useRef } from "react";
-import {
-  MapPin,
-  ArrowRightCircle,
-  ArrowDown,
-} from "lucide-react";
+import { MapPin, ArrowRightCircle, ArrowDown } from "lucide-react";
 import "../CSS/Start.css";
 import LocationSearch from "../Components/LocationSearch";
 import VehiclePannel from "../Components/VehiclePannel";
@@ -263,6 +259,10 @@ function Start() {
     setIsConfirm(false);
     setConfirmRidePannel(false); // Reset confirm ride state
   };
+  const backtovehicle = () => {
+    console.log("backtovehicle");
+    setConfirmRidePannel(false);
+  };
 
   return (
     <div className="w-full">
@@ -285,6 +285,7 @@ function Start() {
       {!isConfirm && !confirmRidePannel ? (
         <div className="flex justify-center lg:h-auto space-y-3 bg-white m-auto">
           {/* Input Fields Section */}
+
           <div
             className={`form-container ${
               isExpanded ? "expanded" : "collapsed"
@@ -299,6 +300,11 @@ function Start() {
               </button>
             )}
             <form>
+              <div className="">
+                <h2 className="text-2xl font-semibold flex justify-center items-center">
+                  Find your trip{" "}
+                </h2>
+              </div>
               <div className="relative my-3">
                 <MapPin className="absolute left-3 top-1/2 w-5 transform -translate-y-1/2 text-gray-700" />
                 <input
@@ -337,7 +343,7 @@ function Start() {
           </div>
         </div>
       ) : confirmRidePannel ? (
-        <ConfirmRide />
+        <ConfirmRide backtovehicle={backtovehicle} />
       ) : (
         <VehiclePannel
           isConfirm={isConfirm}

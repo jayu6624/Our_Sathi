@@ -1,43 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
+import "../CSS/Start.css";
 import {
-  ArrowDown,
-  MapPinned,
   UserRoundSearch,
   MapPinCheckInside,
-  BadgeIndianRupee
+  BadgeIndianRupee,
 } from "lucide-react";
-import Lookingfordriver from "./Lookingfordriver"; // Import the Lookingfordriver component
+import { useState } from "react";
+import Waitfordriver from "./Waitfordriver";
 
-function ConfirmRide(props) {
-  const [isConfirmed, setIsConfirmed] = useState(false);
+function Lookingfordriver(props) {
+  const [IsWaitFor, setIsWaitFor] = useState(false);
 
-  const backtolist = () => {
-    props.backtovehicle();
-  };
-
-  const handleConfirm = () => {
-    setIsConfirmed(true);
-  };
-
-  if (isConfirmed) {
-    return <Lookingfordriver />;
+  setTimeout(() => {
+    setIsWaitFor(true);
+  }, 2000);
+  if (IsWaitFor) {
+    window.location.href = "/riding";
   }
-
   return (
     <div className="font-sans">
       <div className=" confirm_ride bg-gray-100 rounded-t-lg w-full ">
         <h2 className="text-2xl font-bold bottom-0  m-auto flex justify-center items-center p-2">
-          Confirm your ride
+          Looking for Driver
         </h2>
-        <span>
-          {" "}
-          <button
-            onClick={backtolist}
-            className="absolute right-4 top-2 bg-white p-2 rounded-full hover:bg-gray-300"
-          >
-            <ArrowDown className="w-5 h-5 text-gray-700" />
-          </button>
-        </span>
         <div className="flex justify-center items-center">
           <img
             className="w-[40%] flex m-auto"
@@ -45,7 +30,7 @@ function ConfirmRide(props) {
             alt=""
           />
         </div>
-        
+
         <div className="w-full p-5 ">
           <div className="flex justify-start items-center h-16   ">
             <span className="ml-3">
@@ -71,26 +56,20 @@ function ConfirmRide(props) {
           <div className="w-full border-b-2 border-[#00000035] rounded-3xl mt-3"></div>
           <div className="flex justify-start items-center h-16  mt-2">
             <span className="ml-3">
-              <BadgeIndianRupee /> 
+              <BadgeIndianRupee />
             </span>
             <div className="ml-3">
               <h3 className="text-lg font-bold">₹190.20</h3>
               <p></p>
             </div>
           </div>
-        </div>
-
-        <div className="w-full flex justify-center space-x-3">
-          <button
-            onClick={handleConfirm}
-            className=" btn text-lg p-2 h-10 bg-green-700 font-semibold text-white rounded-lg"
-          >
-            Confirm
-          </button>
+          <div className="flex justify-center items-center p-5">
+            <div className="loader"></div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-export default ConfirmRide;
+export default Lookingfordriver;

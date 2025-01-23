@@ -84,7 +84,7 @@ captainSchema.methods.comparePassword = async function (password) {
 // JWT generation method
 captainSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: "24h",
+    expiresIn: "10000",
   });
   return token;
 };

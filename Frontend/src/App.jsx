@@ -9,6 +9,7 @@ import Start from "./pages/Start";
 import Userprotected from "./pages/Userprotected";
 import Userlogout from "./pages/Userlogout";
 import CaptainHome from "./pages/CaptainHome";
+import Waitfordriver from "./Components/Waitfordriver";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           }
         />
         <Route path="/captainhome" element={<CaptainHome />} />
+        <Route path="/riding" element={<Waitfordriver/>} />
       </Routes>
     </div>
   );

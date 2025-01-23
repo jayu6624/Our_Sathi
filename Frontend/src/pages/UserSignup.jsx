@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import axios from "axios";
 import { UserDataContext } from "../context/UserContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserSignup = () => {
   const [firstname, setFirstname] = useState("");
@@ -15,9 +17,9 @@ const UserSignup = () => {
   const { user, setuser } = React.useContext(UserDataContext);
 
   const handleSubmit = async (e) => {
-    
-    
     e.preventDefault();
+    setIsLoading(true);
+
     const newuser = {
       fullname: {
         firstname: firstname,
@@ -26,9 +28,8 @@ const UserSignup = () => {
       email: email,
       password: password,
     };
-    console.log("-------------------------------");
-    try {
 
+    try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/users/register`,
         newuser
@@ -37,27 +38,38 @@ const UserSignup = () => {
       if (response.status === 201) {
         const data = response.data;
         setuser(data.user);
-        navigate("/start");
+
+        // Show success toast
+        toast.success("Registration successful! Redirecting...", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+
+        setTimeout(() => {
+          navigate("/start");
+        }, 3000); // Delay for user to see the notification
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        alert(error.response.data.message || "Bad Request");
+        // Show error toast
+        toast.error(error.response.data.message || "User already exists! Please try to log in.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       } else {
-        alert("An unexpected error occurred. Please try again later.");
+        toast.error("An unexpected error occurred. Please try again later.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     } finally {
       setIsLoading(false);
     }
-
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
   };
 
   return (
     <div className="h-full w-full bg-gradient-to-br bg-white flex items-center justify-center p-4 align-middle">
+      <ToastContainer />
       <div className="bg-white w-full h-[100vh] justify-center rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden">
         {/* Logo repositioned to the top-left corner */}
         <div className="absolute top-7 left-8">

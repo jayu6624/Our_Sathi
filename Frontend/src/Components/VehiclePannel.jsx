@@ -1,6 +1,6 @@
 
 
-import React from "react";
+import React, { useState } from "react";
 import { ArrowLeftCircle, UserRound } from "lucide-react";
 import "../CSS/Start.css";
 
@@ -38,13 +38,14 @@ function VehiclePannel(props) {
                 src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_638/v1555367349/assets/d7/3d4b80-1a5f-4a8b-ac2b-bf6c0810f050/original/Final_XL.png"
                 alt=""
               />
-              <div className="p-3 text-sm lg:text-base w-2/3 h-24 justify-center">
+              <div className="p-3 text-sm lg:text-base w-2/3 h-24  box-border flex items-center">
+              <div className="flex flex-col ">
                 <h3 className="flex font-bold text-md lg:text-lg">
                   UberGo
                   <span className="flex">
                     <UserRound
                       strokeWidth={2}
-                      className="size-[17px] font-bold ml-3 mt-1.5 mr-1"
+                      className="size-[15px] font-bold ml-3 mt-1 mr-1"
                     />
                     4
                   </span>
@@ -53,6 +54,7 @@ function VehiclePannel(props) {
                 <p className="text-gray-950 text-xs lg:text-sm">
                   Affordable, compact ride
                 </p>
+                </div>
               </div>
               <h2 className="font-bold mr-3 m-auto justify-center lg:text-lg">
                 ₹193.20
@@ -69,19 +71,21 @@ function VehiclePannel(props) {
                 src="https://clipart-library.com/2023/Uber_Auto_312x208_pixels_Mobile.png"
                 alt=""
               />
-              <div className="p-3 text-sm lg:text-base w-2/3 h-24 m-auto">
+              <div className="p-3 text-sm lg:text-base w-2/3 h-24  box-border flex items-center">
+              <div className="flex flex-col ">
                 <h3 className="flex font-bold text-md lg:text-lg">
                   UberGo
                   <span className="flex">
                     <UserRound
                       strokeWidth={2}
-                      className="size-[17px] font-bold ml-3 mt-1.5 mr-1"
+                      className="size-[15px] font-bold ml-3 mt-1 mr-1"
                     />
                     3
                   </span>
                 </h3>
                 <h5 className="text-xs lg:text-sm font-bold">2 min away</h5>
                 <p className="text-xs lg:text-sm">Affordable, compact ride</p>
+                </div>
               </div>
               <h2 className="font-bold mr-3 m-auto justify-center lg:text-lg">
                 ₹80.00
@@ -98,19 +102,21 @@ function VehiclePannel(props) {
                 src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png"
                 alt=""
               />
-              <div className="p-3 text-sm lg:text-base w-2/3 h-24 m-auto">
+              <div className="p-3 text-sm lg:text-base w-2/3 h-24  box-border flex items-center">
+              <div className="flex flex-col ">
                 <h3 className="flex font-bold text-md lg:text-lg">
                   UberGo
                   <span className="flex">
                     <UserRound
                       strokeWidth={2}
-                      className="size-[17px] font-bold ml-3 mt-1.5 mr-1"
+                      className="size-[15px] font-bold ml-3 mt-1 mr-1"
                     />
                     1
                   </span>
                 </h3>
                 <h5 className="text-xs lg:text-sm font-bold">1 min away</h5>
                 <p className="text-xs lg:text-sm">Affordable, compact ride</p>
+                </div>
               </div>
               <h2 className="font-bold mr-3 m-auto justify-center lg:text-lg">
                 ₹65.00

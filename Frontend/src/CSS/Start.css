@@ -17,29 +17,119 @@
   .form-container.expanded {
     height: auto;
   }
-  .form-container{
+  .form-container {
     bottom: 15px;
   }
   .form-container.collapsed {
     top: auto;
     height: auto;
-    
   }
 }
 
-@media(max-width:500px){
-  .vehical_list{
-    position:fixed;
-    bottom:0;
+@media (max-width: 500px) {
+  .vehical_list {
+    position: fixed;
+    bottom: 0;
   }
 }
-@media(min-width:500px){
-  .vehical_list{
-    bottom: 0;
+@media (min-width: 500px) {
+  .vehical_list {
     position: absolute;
     transform-box: border-box;
-    margin: auto auto;
-    left: 50%;
-    transform: translate(-50%, -100%);
+    top: 25%;
+    left: 35%;
+    width: 30%;
+  }
+}
+
+@media (max-width: 500px) {
+  .confirm_ride {
+    position: fixed;
+    bottom: 0;
+  }
+  .btn {
+    width: 100%;
+    margin: 20px;
+  }
+}
+
+@media (min-width: 500px) {
+  .confirm_ride {
+    position: absolute;
+    transform-box: border-box;
+    top: 25%;
+    left: 35%;
+    width: 30%;
+  }
+  .btn {
+    width: 60%;
+    height: 15%;
+    margin-bottom: 15px;
+  }
+}
+
+.car-container {
+  position: relative;
+  width: 200px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px auto;
+  overflow: hidden;
+}
+
+.car-image {
+  position: relative;
+  z-index: 2;
+  width: 100px;
+  height: 60px;
+}
+
+.ripple {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(229, 240, 255, 0.4);
+  border-radius: 50%;
+  animation: ripple 2s linear infinite;
+}
+
+.ripple:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.ripple:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.loader {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #4a4a4ac4;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
   }
 }

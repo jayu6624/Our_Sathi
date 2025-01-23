@@ -31,7 +31,7 @@ const CaptainSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     const captaindata = {
       fullname: {
         firstname: firstname,
@@ -46,27 +46,43 @@ const CaptainSignup = () => {
         plate: vehicalPlate,
       },
     };
-
+  
+    console.log("Registering captain:", captaindata);
+  
     try {
       const response = await axios.post(
         `http://localhost:4000/captains/register`,
         captaindata
       );
-      console.log("-------------------");
-      console.log(captaindata);
-
+  
       if (response.status === 201) {
-        const data = response.data;
-        setCaptain(data.captain);
-        localStorage.setItem("token", data.token);
-        navigate("/captainhome");
+        const { captain, token } = response.data;
+        setCaptain(captain); // Save captain data to context
+        localStorage.setItem("token", token); // Save token in local storage
+        console.log("Registration successful:", captain);
+        navigate("/captainlogin"); // Navigate to captain home page
       }
     } catch (error) {
-      console.error("Error during signup:", error);
+      if (error.response) {
+        // Backend returned a response with an error
+        console.error("Error response:", error.response.data);
+        alert(
+          error.response.data.message || "Failed to register. Please try again."
+        );
+      } else if (error.request) {
+        // No response was received from the backend
+        console.error("Error request:", error.request);
+        alert("Network error. Please check your connection.");
+      } else {
+        // Other unexpected errors
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred. Please try again.");
+      }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Stop the loading spinner
     }
   };
+  
 
   return (
     <div
@@ -90,9 +106,9 @@ const CaptainSignup = () => {
               onSubmit={handleSubmit}
               className="lg:text-2xl space-y-6 mt-4 lg:w-[80%] mx-auto"
             >
-              <div className="p-8">
+              <div className="p-2">
                 <div>
-                  <h2 className="lg:text-3xl text-xl font-bold flex justify-center text-gray-900">
+                  <h2 className="lg:text-3xl text-xl font-bold flex justify-center text-gray-900 mt-2 mb-3">
                     Create Your Account
                   </h2>
                 </div>
@@ -152,7 +168,7 @@ const CaptainSignup = () => {
                       type: "dropdown",
                       value: vehicalType,
                       setValue: setVehicalType,
-                      options: ["Car", "Auto", "Motorcycle"], // Dropdown options
+                      options: ["car", "auto", "motorcycle"], // Dropdown options
                       Icon: Truck,
                     },
                     {
