@@ -12,8 +12,12 @@ module.exports.registerUser = async (req, res, next) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { fullname, email, password } = req.body;
-
+    const { fullname, email, password, phonenumber } = req.body;
+    if (!/^\d{10}$/.test(phonenumber)) {
+      return res.status(400).json({
+        message: "Invalid phone number format. Please provide a 10-digit number.",
+      });
+    }
     // Check if the user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -24,12 +28,17 @@ module.exports.registerUser = async (req, res, next) => {
 
     // Hash password and create the new user
     const hashedPassword = await userModel.hashPassword(password);
+
     const user = await userServise.cerateUser({
       firstname: fullname.firstname,
       lastname: fullname.lastname,
       email,
+      phonenumber,
       password: hashedPassword,
     });
+
+    console.log(user);
+    
 
     // Generate token and send response
     const token = user.generateAuthToken();

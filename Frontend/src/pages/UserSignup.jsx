@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { ArrowRight, Lock, Mail, User } from "lucide-react";
+import { ArrowRight, Lock, Mail, User, Phone } from "lucide-react";
 import axios from "axios";
 import { UserDataContext } from "../context/UserContext";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,6 +12,7 @@ const UserSignup = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { user, setuser } = React.useContext(UserDataContext);
@@ -27,6 +28,7 @@ const UserSignup = () => {
       },
       email: email,
       password: password,
+      phonenumber: phone,
     };
 
     try {
@@ -86,7 +88,7 @@ const UserSignup = () => {
               onSubmit={handleSubmit}
               className="lg:text-2xl space-y-6 mt-4 lg:w-[80%] mx-auto"
             >
-              <div>
+              <div className="">
                 <h2 className="lg:text-3xl text-xl font-bold flex justify-center text-gray-900">
                   Sign Up
                 </h2>
@@ -141,6 +143,24 @@ const UserSignup = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                     placeholder="Enter your email"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Phone Number Input */}
+              <div>
+                <label className="block text-lg font-medium text-gray-700 mb-2">
+                  Phone Number
+                </label>
+                <div className="mt-1 relative">
+                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                    placeholder="Enter your phone number"
                     required
                   />
                 </div>

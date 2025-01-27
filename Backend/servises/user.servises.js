@@ -4,9 +4,10 @@ module.exports.cerateUser = async ({
   firstname,
   lastname,
   email,
+  phonenumber,
   password,
 }) => {
-  if (!firstname || !email || !password) {
+  if (!firstname || !email || !password ||!phonenumber) {
     throw new Error("all feilds are required");
   }
   const user = await userModel.create({
@@ -16,6 +17,7 @@ module.exports.cerateUser = async ({
     },
     email,
     password,
+    phonenumber
 });
   return user;
 };
