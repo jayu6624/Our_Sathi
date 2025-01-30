@@ -157,18 +157,28 @@
 // }
 
 // export default CaptainHome;
-
 import React, { useState, useRef, useEffect } from "react";
 import { LogOut } from "lucide-react";
+import { Link } from "react-router-dom";
 import Captaindetail from "../Components/Captaindetail.jsx";
 import gsap from "gsap";
 import Ridepannel from "../Components/Ridepannel.jsx";
-import Riderequest from "../Components/Riderequest.jsx";
+import Ridecomplete from "../Components/Ridecomplete.jsx";
+import Ridestart from "../Components/Ridestart.jsx";
+import OTP from "../Components/OTP.jsx"; // Import OTP component
+import Riderunning from "./Riderunning.jsx";
 
 function CaptainHome() {
   const [ridepannel, setridepannel] = useState(true);
+
   const [riderequest, setriderequest] = useState(false);
+  const [ridestart, setridestart] = useState(false); // New state for Ridestart
+  const [showOTP, setShowOTP] = useState(false); // State for controlling OTP display
+  const [riderunning, setriderunning] = useState(false);
   const ridepannelref = useRef(null);
+  const ridestartref = useRef(null);
+  const rideotpref = useRef(null);
+  const riderunningref = useRef(null);
 
   useEffect(() => {
     if (ridepannelref.current) {
@@ -197,13 +207,47 @@ function CaptainHome() {
         </div>
       </div>
 
-      {riderequest ? (
-        <Riderequest 
-          onBack={() => {
-            setriderequest(false);
-            setridepannel(false);
-          }}
-        />
+      {/* {riderequest ? (
+        <>
+          {ridestart ? (
+            <Ridecomplete
+              onBack={() => {
+                setriderequest(false);
+                setridepannel(false);
+              }}
+              onStartRide={() => {
+                setridestart(true); // Start ride
+                setShowOTP(true); // Show OTP screen before starting the ride
+              }}
+            />
+          ) : showOTP ? (
+            <OTP
+              onnext={() => {
+                setridestart(true); // Start ride
+                setShowOTP(false);
+                setriderequest(true); // Start ride
+              }}
+              onStartRide={() => {
+                setridestart(true); // Start ride
+                setShowOTP(true); // Show OTP screen before starting the ride
+              }}
+              onBack={() => {
+                setriderequest(false);
+                setridepannel(true);
+              }}
+            /> // Show OTP component if showOTP is true
+          ) : (
+            <Ridestart
+              onBack={() => {
+                setriderequest(true);
+                setridepannel(false);
+              }}
+              Onotp={() => {
+                setShowOTP(true);
+              }}
+            />
+          )}
+        </>
       ) : (
         <>
           <div>
@@ -230,7 +274,58 @@ function CaptainHome() {
             </div>
           )}
         </>
-      )}
+      )} */}
+
+      {/* Header with Logo and Logout */}
+
+      {/* Profile and Ride Panels */}
+      <div>
+        <div>
+          <img
+            src="https://www.hanbit.co.kr/data/editor/20210429161116_qvzgnfvw.gif"
+            alt=""
+            className="h-[50vh] w-full"
+          />
+        </div>
+
+        {/* Captain Profile Section */}
+        <div>
+          <Captaindetail />
+        </div>
+
+        {/* Ride Panel Section */}
+        {ridepannel ? (
+          <div ref={ridepannelref} className="w-full z-10 bottom-0 bg-white">
+            <Ridepannel
+              setridepannel={setridepannel}
+              setridestart={setridestart}
+              setriderequest={setriderequest}
+            />
+          </div>
+        ) : null}
+
+        {/* Ride Start Section */}
+        {ridestart ? (
+          <div ref={ridestartref} className="w-full z-10 bottom-0 bg-white ">
+            <Ridestart
+              setridepannel={setridepannel}
+              setridestart={setridestart}
+              setShowOTP={setShowOTP}
+            />
+          </div>
+        ) : null}
+
+        {showOTP ? (
+          <div ref={rideotpref} className="w-full z-10 bottom-0 bg-white ">
+            <OTP
+              setridepannel={setridepannel}
+              setridestart={setridestart}
+              setShowOTP={setShowOTP}
+              setriderunning={setriderunning}
+            />
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

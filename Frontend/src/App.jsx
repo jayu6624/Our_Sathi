@@ -10,7 +10,7 @@ import Userprotected from "./pages/Userprotected";
 import Userlogout from "./pages/Userlogout";
 import CaptainHome from "./pages/CaptainHome";
 import Waitfordriver from "./Components/Waitfordriver";
-import Riderequest from "./Components/Riderequest";
+import Riderunning from "./pages/Riderunning";
 
 function App() {
   return (
@@ -38,8 +38,8 @@ function App() {
           }
         />
         <Route path="/captainhome" element={<CaptainHome />} />
-        <Route path="/riding" element={<Waitfordriver/>} />
-        
+        <Route path="/riding" element={<Waitfordriver />} />
+        <Route path="/riderunning" element={<Riderunning />} />
       </Routes>
     </div>
   );

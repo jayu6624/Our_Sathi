@@ -1,3 +1,6 @@
+
+
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -9,7 +12,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-function Riderequest({ onBack }) {
+function Ridecomplete({ onBack, onStartRide }) {
   const [animateOut, setAnimateOut] = useState(false);
 
   const handleBack = () => {
@@ -23,11 +26,9 @@ function Riderequest({ onBack }) {
     <motion.div
       className="h-screen flex flex-col"
       initial={{ y: 0 }}
-      animate={animateOut ? { y: '100vh' } : { y: 0 }}
+      animate={animateOut ? { y: "100vh" } : { y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      
-    
       {/* Main Content */}
       <div className="flex-1 bg-white p-4 overflow-y-auto">
         <div className="">
@@ -120,17 +121,18 @@ function Riderequest({ onBack }) {
       {/* Bottom Button */}
       <div className="fixed bottom-0 left-0 w-full bg-[#ffc100ba]">
         <button
-          onClick={() => alert('Ride Picked!')}
-          className="w-full text-center p-4 text-blacl font-bold  hover:bg-[#8f7938ba]"
+          onClick={onStartRide} // Trigger the start ride handler
+          className="w-full text-center p-4 text-black font-bold hover:bg-[#8f7938ba]"
         >
-          Peekup Ride
+          Complete Ride 
         </button>
       </div>
     </motion.div>
   );
 }
 
-export default Riderequest;
+export default Ridecomplete;
+
 
 
 // import React from "react";

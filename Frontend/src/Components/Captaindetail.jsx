@@ -1,4 +1,5 @@
 import React from "react";
+
 import { LogOut, Clock, Gauge, NotebookPen } from "lucide-react";
 function Captaindetail() {
   return (
