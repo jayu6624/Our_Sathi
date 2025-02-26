@@ -42,6 +42,10 @@ const rideSchema = mongoose.Schema({
     },
     signature:{
         type:String
+    },
+    otp:{
+        type:String,
+        select:false
     }
 })
 

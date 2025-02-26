@@ -86,26 +86,26 @@ const UserSignup = () => {
           <div className="space-y-3 my-auto items-center justify-center">
             <form
               onSubmit={handleSubmit}
-              className="lg:text-2xl space-y-6 mt-4 lg:w-[80%] mx-auto"
+              className="lg:text-2xl space-y-3 mt-4 lg:w-[80%] mx-auto"
             >
               <div className="">
-                <h2 className="lg:text-3xl text-xl font-bold flex justify-center text-gray-900">
-                  Sign Up
+                <h2 className="lg:text-3xl text-xl font-bold flex justify-center text-gray-900 mb-5">
+                Create an Account
                 </h2>
               </div>
 
               {/* First Name Input */}
-              <div>
-                <label className="block text-lg font-medium text-gray-700 mb-2">
+              <div className="text-md">
+                <label className="block  font-medium text-gray-700 mb-1">
                   First Name
                 </label>
-                <div className="mt-1 relative">
+                <div className=" relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <input
                     type="text"
                     value={firstname}
                     onChange={(e) => setFirstname(e.target.value)}
-                    className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                    className=" w-full px-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                     placeholder="Enter your first name"
                     required
                   />
@@ -114,7 +114,7 @@ const UserSignup = () => {
 
               {/* Last Name Input */}
               <div>
-                <label className="block text-lg font-medium text-gray-700 mb-2">
+                <label className="block  font-medium text-gray-700 mb-2">
                   Last Name
                 </label>
                 <div className="mt-1 relative">
@@ -123,7 +123,7 @@ const UserSignup = () => {
                     type="text"
                     value={lastname}
                     onChange={(e) => setLastname(e.target.value)}
-                    className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                    className=" w-full px-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                     placeholder="Enter your last name"
                     required
                   />
@@ -132,7 +132,7 @@ const UserSignup = () => {
 
               {/* Email Input */}
               <div>
-                <label className="block text-lg font-medium text-gray-700 mb-2">
+                <label className="block  font-medium text-gray-700 mb-2">
                   Email
                 </label>
                 <div className="mt-1 relative">
@@ -141,7 +141,7 @@ const UserSignup = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                    className=" w-full px-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                     placeholder="Enter your email"
                     required
                   />
@@ -150,7 +150,7 @@ const UserSignup = () => {
 
               {/* Phone Number Input */}
               <div>
-                <label className="block text-lg font-medium text-gray-700 mb-2">
+                <label className="block  font-medium text-gray-700 mb-2">
                   Phone Number
                 </label>
                 <div className="mt-1 relative">
@@ -159,7 +159,7 @@ const UserSignup = () => {
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                    className=" w-full px-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                     placeholder="Enter your phone number"
                     required
                   />
@@ -168,7 +168,7 @@ const UserSignup = () => {
 
               {/* Password Input */}
               <div>
-                <label className="block text-lg font-medium text-gray-700 mb-2">
+                <label className="block font-medium text-gray-700 mb-2">
                   Password
                 </label>
                 <div className="mt-1 relative">
@@ -177,23 +177,23 @@ const UserSignup = () => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
+                    className=" w-full px-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all bg-gray-50 focus:bg-white"
                     placeholder="Enter your password"
                     required
                   />
                 </div>
               </div>
 
-              <div>
+              <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className={`w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all ${
+                  className={`w-[50%] flex items-center justify-center mt-2 py-2 border border-transparent rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all ${
                     isLoading ? "opacity-75 cursor-wait" : ""
                   }`}
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-6 h-6  border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <>
                       Sign up
@@ -202,8 +202,8 @@ const UserSignup = () => {
                   )}
                 </button>
               </div>
-
-              <p className="text-center text-sm text-gray-600">
+                  <div className="mt-2">
+              <p className="text-center text-sm text-gray-600 ">
                 Already have an account?{" "}
                 <Link
                   to="/userlogin"
@@ -212,6 +212,7 @@ const UserSignup = () => {
                   Log in here
                 </Link>
               </p>
+              </div>
             </form>
           </div>
         </div>

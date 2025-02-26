@@ -154,13 +154,13 @@ const UserLogin = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="bg-white w-full justify-center rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden">
         <div className="bg-white w-full h-[100vh] rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden ">
-          <div className="absolute justify-start items-center m-2 ">
-            <img
-              className="backimg w-16 sm:w-20 bg-hide lg:pt-6 lg:ml-6 lg:w-28"
-              src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
-              alt="Uber Logo"
-            />
-          </div>
+          <div className="absolute top-7 left-8">
+          <img
+            className="w-16 lg:w-28"
+            src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
+            alt="Uber Logo"
+          />
+        </div>
           {/* Left side - Form */}
           <div className="w-full md:w-1/2 p-8 md:p-12 my-auto">
             <div className="space-y-6 my-auto items-center justify-center">
@@ -173,9 +173,9 @@ const UserLogin = () => {
                     Welcome to Login page
                   </h2>
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-4 font-medium">
                   <div>
-                    <label className="block text-lg font-medium text-gray-700 mt-10 mb-2">
+                    <label className="block  font-medium text-gray-700 mt-10 mb-2">
                       User Email
                     </label>
                     <div className="mt-1 relative">
@@ -192,7 +192,7 @@ const UserLogin = () => {
                   </div>
 
                   <div>
-                    <label className="block text-lg font-medium text-gray-700 mb-2">
+                    <label className="block  font-medium text-gray-700 mb-2">
                       Password
                     </label>
                     <div className="mt-1 relative">
@@ -259,6 +259,17 @@ const UserLogin = () => {
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </>
                   </Link>
+                </div>
+                <div>
+                  <p className="text-center text-sm text-gray-600">
+                    Create an Account?{" "}
+                    <Link
+                      to={"/usersignup"}
+                      className="font-medium text-red-600 hover:text-red-500"
+                    >
+                      Create account
+                    </Link>
+                  </p>
                 </div>
               </form>
             </div>
