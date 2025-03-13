@@ -99,7 +99,7 @@
 // export default UserLogin;
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Lock, Mail } from "lucide-react";
+import { ArrowRight, Lock, Mail, ArrowLeft } from "lucide-react";
 import { UserDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -131,6 +131,9 @@ const UserLogin = () => {
         const data = response.data;
         setuser(data.user);
         localStorage.setItem("token", JSON.stringify(response.data.token));
+        console.log(localStorage.getItem("token"));
+        
+
         toast.success("Login successful!"); // Toast notification
         setLoginSuccess(true); // Show success message
         setTimeout(() => {
@@ -150,23 +153,27 @@ const UserLogin = () => {
   };
 
   return (
-    <div className="h-full w-full bg-gradient-to-br bg-white flex items-center justify-center p-4 align-middle">
+    <div className="h-full w-full bg-gradient-to-br bg-white flex items-center justify-center p-2 align-middle">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="bg-white w-full justify-center rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden">
-        <div className="bg-white w-full h-[100vh] rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden ">
-          <div className="absolute top-7 left-8">
-          <img
-            className="w-16 lg:w-28"
-            src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
-            alt="Uber Logo"
-          />
-        </div>
+        <div className="bg-white w-full h-[100vh] rounded-2xl shadow-xl flex flex-col md:flex-row overflow-hidden justify-between">
+          <div className=" m-4 flex justify-between"></div>
           {/* Left side - Form */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 my-auto">
-            <div className="space-y-6 my-auto items-center justify-center">
+          <div className="w-full md:w-1/2 p-8 md:p-12 my-auto h-full justify-center flex flex-col">
+            <div className="text-xl font-semibold font-serif text-black flex justify-between">
+              <div className="text-xl font-semibold font-serif text-black flex justify-between lg:text-2xl">
+                Our_<span className="text-blue-400  ">साथी</span>{" "}
+              </div>
+              <div className="flex items-center justify-center ">
+                <Link to={"/"}>
+                  <ArrowLeft className="w-5 h-5 xl:w-7 xl:h-7 text-black" />
+                </Link>
+              </div>
+            </div>
+            <div className="space-y-6 my-auto items-center justify-center ">
               <form
                 onSubmit={handleSubmit}
-                className="lg:text-2xl space-y-6 mt-4 lg:w-[80%] mx-auto"
+                className="lg:text-2xl space-y-6 mt-4 lg:w-[80%] mx-auto h-full my-auto  justify-center"
               >
                 <div>
                   <h2 className="lg:text-3xl text-xl font-bold flex justify-center text-gray-900">
@@ -286,7 +293,10 @@ const UserLogin = () => {
             />
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 text-center text-white">
               <div className="flex flex-col items-center space-y-4">
-                <h3 className="text-4xl font-bold">Uber</h3>
+                <h3 className="text-4xl font-bold">
+                  {" "}
+                  Our_<span className="text-white">साथी</span>
+                </h3>
                 <div className="flex space-x-2">
                   <div className="w-6 h-6 rounded-full bg-red-500 animate-pulse"></div>
                   <div className="w-6 h-6 rounded-full bg-yellow-500 animate-pulse delay-75"></div>

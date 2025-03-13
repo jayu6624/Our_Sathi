@@ -16,6 +16,7 @@ function App() {
   return (
     <div>
       <Routes>
+      
         <Route path="/" element={<Home />} />
         <Route path="/userlogin" element={<UserLogin />} />
         <Route path="/captainlogin" element={<Captainlogin />} />
@@ -38,7 +39,7 @@ function App() {
           }
         />
         <Route path="/captainhome" element={<CaptainHome />} />
-        <Route path="/riding" element={<Waitfordriver />} />
+        
         <Route path="/riderunning" element={<Riderunning />} />
       </Routes>
     </div>

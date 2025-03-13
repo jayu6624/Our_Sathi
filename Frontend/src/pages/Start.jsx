@@ -221,134 +221,283 @@
 // }
 
 // export default Start;
-
-import React, { useState, useRef } from "react";
-import { MapPin, ArrowRightCircle, ArrowDown } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { MapPin, ArrowRightCircle, Menu, X } from "lucide-react";
 import "../CSS/Start.css";
 import LocationSearch from "../Components/LocationSearch";
 import VehiclePannel from "../Components/VehiclePannel";
 import ConfirmRide from "../Components/ConfirmRide";
+import Ride_navbar from "../Components/Ride_navbar";
+import Ridepannel from "../Components/Ridepannel";
 
 function Start() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isConfirm, setIsConfirm] = useState(false);
+  const [ridepannel, setridepannel] = useState(false);
   const [confirmRidePannel, setConfirmRidePannel] = useState(false);
+  const [pickup, setPickup] = useState("");
+  const [destination, setDestination] = useState("");
+  const [activeInput, setActiveInput] = useState(null); // 'pickup' or 'destination'
+  const [showLocationSearch, setShowLocationSearch] = useState(false);
+  const [vehicle, setVehicle] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('trip'); // 'trip', 'vehicle', or 'confirm'
 
-  const handleExpandClick = () => {
-    setIsExpanded(true);
-    setIsConfirm(false);
+  // Refs for inputs
+  const pickupInputRef = useRef(null);
+  const destinationInputRef = useRef(null);
+
+  // Handle input focus/click for location search
+  const handleInputFocus = (inputType) => {
+    setActiveInput(inputType);
+    setShowLocationSearch(true);
   };
 
-  const handleCollapseClick = () => {
-    setIsExpanded(false);
+  // Enhanced location selection handler for better mobile support
+  const handleLocationSelect = (location) => {
+    console.log(`Setting location: ${location} for input: ${activeInput}`);
+
+    if (activeInput === "pickup") {
+      setPickup(location);
+      // Focus destination after selecting pickup location
+      setTimeout(() => {
+        if (destinationInputRef.current) {
+          destinationInputRef.current.focus();
+        }
+      }, 100);
+    } else if (activeInput === "destination") {
+      setDestination(location);
+    }
+
+    setShowLocationSearch(false);
   };
 
-  const handleConfirmClick = (e) => {
-    e.preventDefault();
-    const pickUp = document.getElementById("pickup").value.trim();
-    const destination = document.getElementById("destination").value.trim();
-    if (pickUp && destination) {
-      setIsConfirm(true);
-      setIsExpanded(false);
-    } else {
-      alert("Please fill in all required fields.");
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    if (showLocationSearch) {
+      setShowLocationSearch(false);
     }
   };
 
-  const handleBackToForm = () => {
-    setIsConfirm(false);
-    setConfirmRidePannel(false); // Reset confirm ride state
+  // Handle input change
+  const handleInputChange = (e, type) => {
+    if (type === "pickup") {
+      setPickup(e.target.value);
+    } else {
+      setDestination(e.target.value);
+    }
   };
-  const backtovehicle = () => {
-    console.log("backtovehicle");
+
+  // Close location search when clicking outside
+  const handleBackdropClick = () => {
+    setShowLocationSearch(false);
+  };
+
+  // Get current input value based on active input
+  const getCurrentInputValue = () => {
+    return activeInput === "pickup" ? pickup : destination;
+  };
+
+  // Handle transition from trip form to vehicle panel
+  const handleTripFormConfirm = () => {
+    setCurrentView('vehicle');
+    setridepannel(true);
+  };
+
+  // Handle back navigation from vehicle panel to trip form
+  const handleBackFromVehicle = () => {
+    setCurrentView('trip');
+    setridepannel(false);
+  };
+
+  // Handle vehicle selection to go to confirm ride panel
+  const handleVehicleSelect = () => {
+    setCurrentView('confirm');
+    setConfirmRidePannel(true);
+    setridepannel(false);
+  };
+
+  // Handle back navigation from confirm to vehicle panel
+  const handleBackFromConfirm = () => {
+    setCurrentView('vehicle');
     setConfirmRidePannel(false);
+    setridepannel(true);
   };
 
   return (
-    <div className="w-full">
-      {/* Uber logo */}
-      <img
-        className="lg:w-24 w-16 absolute m-4"
-        src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
-        alt="Uber Logo"
-      />
-
-      {/* Background Image */}
-      <div>
-        <img
-          className="lg:h-screen lg:w-screen w-full h-[100vh] object-cover"
-          src="https://www.medianama.com/wp-content/uploads/2018/06/Screenshot_20180619-112715.png.png"
-          alt="Map Background"
-        />
+    <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden">
+      {/* Mobile Menu Toggle - Only visible on small screens */}
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-200 bg-white z-30 relative">
+        <div className="flex items-center space-x-2">
+          <img src="" alt="Logo" className="h-8" />
+          <h2 className="text-lg font-semibold">Ride Service</h2>
+        </div>
+        <button
+          onClick={toggleMobileMenu}
+          className="p-2 rounded-full hover:bg-gray-100"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {!isConfirm && !confirmRidePannel ? (
-        <div className="flex justify-center lg:h-auto space-y-3 bg-white m-auto">
-          {/* Input Fields Section */}
-
-          <div
-            className={`form-container ${
-              isExpanded ? "expanded" : "collapsed"
-            } bg-white lg:w-[35%] w-full p-5 lg:mt-20 rounded-xl shadow-xl`}
-          >
-            {isExpanded && (
-              <button
-                onClick={handleCollapseClick}
-                className="absolute right-4 top-2 bg-white p-2 rounded-full hover:bg-gray-300"
-              >
-                <ArrowDown className="w-5 h-5 text-gray-700" />
-              </button>
-            )}
-            <form>
-              <div className="">
-                <h2 className="text-2xl font-semibold flex justify-center items-center">
-                  Find your trip{" "}
+      {/* Left Section (1 part) - transforms to full width dropdown on mobile */}
+      <div
+        className={`${
+          isMobileMenuOpen ? "block" : "hidden"
+        } md:block w-full md:w-1/4 h-auto md:h-full bg-gray-50 border-r border-gray-200 overflow-y-auto transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen ? "absolute top-16 left-0 z-20" : ""
+        }`}
+      >
+        <div className="p-4 md:p-6">
+          <h1 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6">
+            Navigation
+          </h1>
+        
+          {/* Main container - Shows different views based on current state */}
+          <div className="bg-white rounded-xl shadow-md p-4 md:p-5 mb-4 md:mb-6 relative">
+            {currentView === 'confirm' ? (
+              /* Confirm Ride Panel */
+              <ConfirmRide 
+                backtovehicle={handleBackFromConfirm}
+              />
+            ) : currentView === 'vehicle' ? (
+              /* Vehicle Panel */
+              <VehiclePannel 
+                onBackToForm={handleBackFromVehicle}
+                onVehicleSelect={handleVehicleSelect}
+                setConfirmRidePannel={setConfirmRidePannel}
+              />
+            ) : (
+              /* Trip Form - Default view */
+              <>
+                <h2 className="text-lg md:text-xl font-semibold text-center mb-3 md:mb-4">
+                  Find your trip
                 </h2>
-              </div>
-              <div className="relative my-3">
-                <MapPin className="absolute left-3 top-1/2 w-5 transform -translate-y-1/2 text-gray-700" />
-                <input
-                  id="pickup"
-                  type="text"
-                  placeholder="Add a pick-up point"
-                  className="bg-[#eee] w-full lg:h-16 h-9 rounded-lg lg:text-xl border-black border-2 py-2 pl-10"
-                  required
-                  onFocus={handleExpandClick}
-                />
-              </div>
 
-              <div className="relative my-3">
-                <ArrowRightCircle className="absolute left-3 w-5 top-1/2 transform -translate-y-1/2 text-gray-700" />
-                <input
-                  id="destination"
-                  type="text"
-                  placeholder="Enter your destination"
-                  className="bg-[#eee] w-full h-9 lg:h-16 rounded-lg py-2 border-black border-2 lg:text-xl pl-10"
-                  required
-                  onFocus={handleExpandClick}
-                />
-              </div>
+                <div className="relative z-0">
+                  {/* Pick-up input */}
+                  <div className="relative mb-3 md:mb-4">
+                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 w-5 h-5" />
+                    <input
+                      ref={pickupInputRef}
+                      type="text"
+                      placeholder="Add a pick-up point"
+                      value={pickup}
+                      onChange={(e) => handleInputChange(e, "pickup")}
+                      onFocus={() => handleInputFocus("pickup")}
+                      className="w-full bg-gray-100 border-2 border-gray-300 rounded-lg py-2 pl-10 h-10 md:h-12"
+                    />
+                  </div>
 
-              {isExpanded && (
-                <button
-                  className="bg-black text-white flex justify-center p-2 rounded-lg lg:w-[40%] lg:h-14 lg:text-xl shadow-lg mt-3 items-center m-auto"
-                  onClick={handleConfirmClick}
-                >
-                  Confirm
-                </button>
-              )}
+                  {/* Destination input */}
+                  <div className="relative mb-3 md:mb-4">
+                    <ArrowRightCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 w-5 h-5" />
+                    <input
+                      ref={destinationInputRef}
+                      type="text"
+                      placeholder="Enter your destination"
+                      value={destination}
+                      onChange={(e) => handleInputChange(e, "destination")}
+                      onFocus={() => handleInputFocus("destination")}
+                      className="w-full bg-gray-100 border-2 border-gray-300 rounded-lg py-2 pl-10 h-10 md:h-12"
+                    />
+                  </div>
 
-              {isExpanded && <LocationSearch />}
-            </form>
+                  <button 
+                    className="bg-black text-white rounded-lg py-2 md:py-3 px-4 md:px-6 w-full font-medium" 
+                    onClick={handleTripFormConfirm}
+                  >
+                    Confirm
+                  </button>
+                </div>
+
+                {/* Location search overlay */}
+                {showLocationSearch && (
+                  <div
+                    className={`absolute ${
+                      activeInput === "pickup"
+                        ? "top-[calc(2.5rem+2.5rem)]"
+                        : "top-[calc(2.5rem+2.5rem+3.5rem)]"
+                    } left-0 right-0 bg-white rounded-lg shadow-lg z-50 max-h-[300px] overflow-y-auto`}
+                  >
+                    <LocationSearch
+                      setVehicle={setVehicle}
+                      setIsExpanded={setIsExpanded}
+                      onLocationSelect={handleLocationSelect}
+                      inputValue={getCurrentInputValue()}
+                      activeInput={activeInput}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Recent Locations - Only show when in trip form view */}
+          {currentView === 'trip' && (
+            <div className="bg-white rounded-xl shadow-md p-4 md:p-5">
+              <h3 className="text-base md:text-lg font-medium mb-3 md:mb-4">
+                Recent Locations
+              </h3>
+              <ul className="space-y-2 md:space-y-3">
+                <li className="p-2 md:p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
+                  Home
+                </li>
+                <li className="p-2 md:p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
+                  Work
+                </li>
+                <li className="p-2 md:p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100">
+                  Airport
+                </li>
+              </ul>
+            </div>
+          )}
+
+          {/* Close button for mobile view */}
+          <button
+            onClick={toggleMobileMenu}
+            className="md:hidden mt-4 w-full py-2 bg-gray-200 rounded-lg text-gray-700"
+          >
+            Close Menu
+          </button>
+        </div>
+      </div>
+
+      {/* Right Section (3 parts) */}
+      <div className="w-full md:w-3/4 h-full bg-white overflow-y-auto">
+        {/* Top navigation bar - hidden on mobile since we have the mobile menu */}
+        <div className="hidden md:flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center space-x-4">
+            <img
+              src="https://drive.google.com/file/d/1XZRAyL5jmJaT5NctVUjtOqct3uv73Ocq/view?usp=sharing"
+              alt="Logo"
+              className="h-8"
+            />
+            <h2 className="text-xl font-semibold">Ride Service</h2>
+          </div>
+          <div className="flex items-center space-x-4">
+            <button className="px-4 py-2 text-sm bg-gray-100 rounded-full">
+              Help
+            </button>
+            <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
           </div>
         </div>
-      ) : confirmRidePannel ? (
-        <ConfirmRide backtovehicle={backtovehicle} />
-      ) : (
-        <VehiclePannel
-          isConfirm={isConfirm}
-          onBackToForm={handleBackToForm}
-          setConfirmRidePannel={setConfirmRidePannel}
+
+        {/* Main content area (map) */}
+        <div className="p-3 md:p-6 h-[calc(100%-64px)] md:h-[calc(100%-64px)]">
+          <img
+            className="bg-cover w-full h-full"
+            src="https://s.wsj.net/public/resources/images/BN-XR453_201802_M_20180228165619.gif"
+            alt=""
+          />
+        </div>
+      </div>
+
+      {/* Backdrop when search is open */}
+      {showLocationSearch && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30 z-40"
+          onClick={handleBackdropClick}
         />
       )}
     </div>
@@ -356,3 +505,5 @@ function Start() {
 }
 
 export default Start;
+
+
