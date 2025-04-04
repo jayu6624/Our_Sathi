@@ -93,3 +93,92 @@ module.exports.getAutocompletesuggestion = async (input) => {
     throw error;
   }
 };
+
+// Add new method for reverse geocoding with improved accuracy
+module.exports.reverseGeocode = async (lat, lng) => {
+  try {
+    if (!lat || !lng) {
+      throw new Error("Latitude and longitude are required.");
+    }
+
+    // Validate coordinates
+    const latitude = parseFloat(lat);
+    const longitude = parseFloat(lng);
+
+    if (isNaN(latitude) || isNaN(longitude)) {
+      throw new Error("Invalid latitude or longitude values");
+    }
+
+    if (
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180
+    ) {
+      throw new Error("Coordinates out of valid range");
+    }
+
+    const apiKey = process.env.GOMAPS_API_KEY;
+    // Add result_type parameter to get more precise addresses
+    const url = `https://maps.gomaps.pro/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}&result_type=street_address|route|locality|neighborhood|premise`;
+
+    console.log(`Requesting reverse geocoding for: ${latitude}, ${longitude}`);
+    const response = await axios.get(url);
+
+    console.log(`Reverse Geocoding Status: ${response.status}`);
+
+    if (
+      response.status === 200 &&
+      response.data.results &&
+      response.data.results.length > 0
+    ) {
+      // Process results to get better formatted addresses
+      const processedResults = response.data.results.map((result) => {
+        // Log full result structure for debugging
+        console.log(
+          "Geocoding result component types:",
+          result.address_components
+            ? result.address_components.map((comp) => comp.types.join(", "))
+            : "No components"
+        );
+
+        return result.formatted_address;
+      });
+
+      // Filter out duplicates and limit to 3 results
+      const uniqueResults = [...new Set(processedResults)];
+
+      // If we have a specific address, prioritize it
+      const streetAddressResults = response.data.results.filter(
+        (result) =>
+          result.types &&
+          (result.types.includes("street_address") ||
+            result.types.includes("premise") ||
+            result.types.includes("route"))
+      );
+
+      if (streetAddressResults.length > 0) {
+        // Prioritize specific street addresses
+        const specificResults = streetAddressResults.map(
+          (result) => result.formatted_address
+        );
+        const otherResults = uniqueResults.filter(
+          (addr) => !specificResults.includes(addr)
+        );
+        return [...specificResults, ...otherResults].slice(0, 3);
+      }
+
+      return uniqueResults.slice(0, 3);
+    } else {
+      console.warn("No results from reverse geocoding API:", response.data);
+      throw new Error("Failed to get address from coordinates");
+    }
+  } catch (error) {
+    console.error("Reverse geocoding error:", error);
+    // Provide more helpful error message to client
+    if (error.response) {
+      console.error("API Error Response:", error.response.data);
+    }
+    throw error;
+  }
+};

@@ -9,15 +9,29 @@ import {
 } from "lucide-react";
 import Ridecomplete from "./Ridecomplete";
 
-function PaymentOptions({ amount }) {
+function PaymentOptions({ amount, rideData }) {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
 
+  // Log ride data to console for debugging
+  useEffect(() => {
+    console.log("Ride data in PaymentOptions:", rideData);
+  }, [rideData]);
+
+  // Calculate discounted amount for UPI
   const discountedAmount = (amount * 0.91).toFixed(2); // 9% discount for UPI
 
   const handlePayment = () => {
     if (selectedPayment) {
+      // Log payment details to console
+      console.log("Payment processed:", {
+        method: selectedPayment,
+        originalAmount: amount,
+        paymentAmount: selectedPayment === "upi" ? discountedAmount : amount,
+        rideData: rideData,
+      });
+
       setShowAnimation(true);
 
       // After animation completes, show the ride complete screen
@@ -28,7 +42,7 @@ function PaymentOptions({ amount }) {
   };
 
   if (paymentComplete) {
-    return <Ridecomplete />;
+    return <Ridecomplete rideData={rideData} paymentMethod={selectedPayment} />;
   }
 
   return (
@@ -68,6 +82,17 @@ function PaymentOptions({ amount }) {
             <span className="text-lg font-bold">₹{amount}</span>
           </div>
         </div>
+
+        {/* Vehicle Type Info */}
+        {rideData && rideData.vehicletype && (
+          <div className="mt-2 text-sm text-gray-600">
+            {rideData.vehicletype === "car"
+              ? "UberGo Car"
+              : rideData.vehicletype === "auto"
+              ? "UberGo Auto"
+              : "UberGo Moto"}
+          </div>
+        )}
       </div>
 
       <div className="p-4">

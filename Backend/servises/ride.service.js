@@ -1,6 +1,7 @@
 const rideModel = require("../models/ride.model");
 const mapservice = require("../servises/Maps.servise");
-const crypto = require('crypto')
+const crypto = require("crypto");
+
 async function getfare(pickup, destination) {
   if (!pickup || !destination) {
     throw new Error("pickup and destination is required");
@@ -18,9 +19,9 @@ async function getfare(pickup, destination) {
   }
 
   const fareRates = {
-    auto: { base: 20, perKm: 10, perMin: 1.5 },
-    car: { base: 30, perKm: 13, perMin: 2 },
-    motorcycle: { base: 15, perKm: 7, perMin: 1 },
+    auto: { base: 10, perKm: 8, perMin: 1.2 },
+    car: { base: 25, perKm: 11, perMin: 1.6 },
+    motorcycle: { base: 9, perKm: 7, perMin: 1 },
   };
 
   const fares = {};
@@ -32,9 +33,14 @@ async function getfare(pickup, destination) {
 
   return fares;
 }
- function getotp(num) {
-  function generateotp(num){
-    const otp = crypto.randomInt(Math.pow(10,num-1),Math.pow(10,num)).toString();
+
+module.exports.getfare = getfare;
+
+function getotp(num) {
+  function generateotp(num) {
+    const otp = crypto
+      .randomInt(Math.pow(10, num - 1), Math.pow(10, num))
+      .toString();
     return otp;
   }
 
@@ -60,7 +66,7 @@ module.exports.createRide = async ({
     user,
     pickup,
     destination,
-    otp:getotp(4),
+    otp: getotp(4),
     fare: fare[vehicleType],
   });
 

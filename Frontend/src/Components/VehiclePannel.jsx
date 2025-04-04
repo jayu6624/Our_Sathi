@@ -1,8 +1,27 @@
 import React from "react";
 import { ArrowLeftCircle, UserRound } from "lucide-react";
 
-function VehiclePannel({ onBackToForm, onVehicleSelect, setConfirmRidePannel }) {
-  const handleVehicleSelect = () => {
+function VehiclePannel({
+  onBackToForm,
+  onVehicleSelect,
+  setConfirmRidePannel,
+  fareData,
+  setVehicletype,
+  createride,
+}) {
+  // Helper function to format price with comma separators
+  const formatPrice = (price) => {
+    return price ? price.toLocaleString("en-IN") : "0";
+  };
+
+  // Handle vehicle selection with specific vehicle type
+  const handleVehicleSelect = (type) => {
+    // Set the vehicle type first
+    if (setVehicletype) {
+      setVehicletype(type);
+    }
+
+    // Then navigate to next step
     if (onVehicleSelect) {
       onVehicleSelect();
     } else if (setConfirmRidePannel) {
@@ -14,19 +33,19 @@ function VehiclePannel({ onBackToForm, onVehicleSelect, setConfirmRidePannel }) 
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Choose a Vehicle</h2>
-        <button 
+        <button
           onClick={onBackToForm}
           className="p-1 hover:bg-gray-100 rounded-full"
         >
           <ArrowLeftCircle size={20} />
         </button>
       </div>
-      
+
       <div className="space-y-3">
         {/* UberGo Car */}
-        <div 
+        <div
           className="flex items-center border-2 rounded-xl p-3 cursor-pointer hover:border-black active:border-black shadow-md"
-          onClick={handleVehicleSelect}
+          onClick={() => handleVehicleSelect("car")}
         >
           <div className="w-20 flex-shrink-0">
             <img
@@ -47,14 +66,16 @@ function VehiclePannel({ onBackToForm, onVehicleSelect, setConfirmRidePannel }) 
             <p className="text-xs text-gray-500">Affordable, compact ride</p>
           </div>
           <div className="text-right">
-            <p className="font-bold">₹193.20</p>
+            <p className="font-bold">
+              ₹{fareData ? formatPrice(fareData.car) : "193.20"}
+            </p>
           </div>
         </div>
 
         {/* UberGo Auto */}
-        <div 
+        <div
           className="flex items-center border-2 rounded-xl p-3 cursor-pointer hover:border-black active:border-black shadow-md"
-          onClick={handleVehicleSelect}
+          onClick={() => handleVehicleSelect("auto")}
         >
           <div className="w-20 flex-shrink-0">
             <img
@@ -75,14 +96,16 @@ function VehiclePannel({ onBackToForm, onVehicleSelect, setConfirmRidePannel }) 
             <p className="text-xs text-gray-500">Affordable, compact ride</p>
           </div>
           <div className="text-right">
-            <p className="font-bold">₹80.00</p>
+            <p className="font-bold">
+              ₹{fareData ? formatPrice(fareData.auto) : "80.00"}
+            </p>
           </div>
         </div>
 
         {/* UberGo Moto */}
-        <div 
+        <div
           className="flex items-center border-2 rounded-xl p-3 cursor-pointer hover:border-black active:border-black shadow-md"
-          onClick={handleVehicleSelect}
+          onClick={() => handleVehicleSelect("moto")}
         >
           <div className="w-20 flex-shrink-0">
             <img
@@ -103,7 +126,9 @@ function VehiclePannel({ onBackToForm, onVehicleSelect, setConfirmRidePannel }) 
             <p className="text-xs text-gray-500">Affordable, compact ride</p>
           </div>
           <div className="text-right">
-            <p className="font-bold">₹65.00</p>
+            <p className="font-bold">
+              ₹{fareData ? formatPrice(fareData.motorcycle) : "65.00"}
+            </p>
           </div>
         </div>
       </div>

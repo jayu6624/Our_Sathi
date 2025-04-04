@@ -15,7 +15,8 @@ module.exports.registerUser = async (req, res, next) => {
     const { fullname, email, password, phonenumber } = req.body;
     if (!/^\d{10}$/.test(phonenumber)) {
       return res.status(400).json({
-        message: "Invalid phone number format. Please provide a 10-digit number.",
+        message:
+          "Invalid phone number format. Please provide a 10-digit number.",
       });
     }
     // Check if the user already exists
@@ -38,7 +39,6 @@ module.exports.registerUser = async (req, res, next) => {
     });
 
     console.log(user);
-    
 
     // Generate token and send response
     const token = user.generateAuthToken();
@@ -73,7 +73,23 @@ module.exports.loginUser = async (req, res, next) => {
 };
 
 module.exports.getProfile = async (req, res, next) => {
-  return res.status(200).json(req.user);
+  try {
+    // User is already attached to req by the auth middleware
+    const user = req.user;
+
+    // Return user data without sensitive information
+    return res.status(200).json({
+      id: user._id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      phonenumber: user.phonenumber,
+      createdAt: user.createdAt,
+    });
+  } catch (error) {
+    console.error("Error in getProfile:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
 module.exports.logout = async (req, res, next) => {

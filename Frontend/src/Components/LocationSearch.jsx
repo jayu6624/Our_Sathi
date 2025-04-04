@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LocateFixed, Loader } from "lucide-react";
 import axios from "axios";
-import { getAuthHeader } from "../utils/Auth";
 
 function LocationSearch({
   setVehicle,
@@ -27,9 +26,8 @@ function LocationSearch({
       setError(null);
 
       try {
-        // Get token from localStorage and clean it up
-        let token =
-          localStorage.getItem("token") || localStorage.getItem("accessToken");
+        // Get token directly from localStorage
+        let token = localStorage.getItem("token");
 
         // Remove any surrounding quotes from the token if present
         if (token && (token.startsWith('"') || token.startsWith("'"))) {
@@ -41,22 +39,40 @@ function LocationSearch({
           token ? `${token.substring(0, 10)}...` : "No token"
         );
 
+        if (!token) {
+          console.error("No token found in localStorage");
+          setError("Authentication required. Please log in.");
+          setLoading(false);
+          return;
+        }
+
         const response = await axios.get(
-          `http://localhost:4000/maps/get-suggestions?input=${encodeURIComponent(inputValue)}`,
+          `http://localhost:4000/maps/get-suggestions?input=${encodeURIComponent(
+            inputValue
+          )}`,
           {
             headers: {
-              ...getAuthHeader(),
-              'Content-Type': 'application/json'
-            }
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
         );
 
+        console.log("API Response:", response.data);
         setSuggestions(response.data);
       } catch (err) {
         console.error("Error fetching suggestions:", err);
 
+        // Log detailed error information
+        if (err.response) {
+          console.error("Response status:", err.response.status);
+          console.error("Response data:", err.response.data);
+        }
+
         if (err.response && err.response.status === 401) {
           setError("Authentication failed. Please log in again.");
+          // Optionally redirect to login page
+          // window.location.href = "/login";
         } else {
           setError("Failed to load suggestions. Please try again.");
         }

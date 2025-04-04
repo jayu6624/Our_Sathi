@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MapPin,
   Navigation,
@@ -6,11 +6,20 @@ import {
   PhoneCall,
   ArrowLeft,
   CheckCircle,
+  Car,
+  Truck,
+  Bike,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-function Ridecomplete({ onBack }) {
+function Ridecomplete({ onBack, rideData, paymentMethod }) {
   const [animateOut, setAnimateOut] = useState(false);
+
+  // Log ride data to console for debugging
+  useEffect(() => {
+    console.log("Ride data in Ridecomplete:", rideData);
+    console.log("Payment method:", paymentMethod);
+  }, [rideData, paymentMethod]);
 
   const handleBack = () => {
     setAnimateOut(true);
@@ -22,6 +31,35 @@ function Ridecomplete({ onBack }) {
   const handleCompleteRide = () => {
     window.location.href = "/start";
   };
+
+  // Helper function to get vehicle name
+  const getVehicleName = () => {
+    if (!rideData || !rideData.vehicletype) {
+      return "Maruti Suzuki Alto";
+    }
+
+    switch (rideData.vehicletype) {
+      case "auto":
+        return "Auto Rickshaw";
+      case "moto":
+        return "Yamaha FZ";
+      case "car":
+      default:
+        return "Maruti Suzuki Alto";
+    }
+  };
+
+  // Helper function to format price
+  const formatPrice = (price) => {
+    if (!price) return "190.20";
+    return typeof price === "number" ? price.toLocaleString("en-IN") : price;
+  };
+
+  // Calculate payment details
+  const originalAmount = rideData?.fare || 190.2;
+  const discountPercent = paymentMethod === "upi" ? 9 : 0;
+  const discountAmount = ((originalAmount * discountPercent) / 100).toFixed(2);
+  const finalAmount = (originalAmount - discountAmount).toFixed(2);
 
   return (
     <motion.div
@@ -53,7 +91,7 @@ function Ridecomplete({ onBack }) {
           />
           <div>
             <h2 className="text-lg font-semibold">Harsh Patel</h2>
-            <p className="text-sm text-gray-500">Maruti Suzuki Alto</p>
+            <p className="text-sm text-gray-500">{getVehicleName()}</p>
             <div className="flex items-center mt-1">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -85,9 +123,11 @@ function Ridecomplete({ onBack }) {
             <MapPin size={18} className="text-gray-700" />
           </div>
           <div className="ml-3">
-            <h3 className="font-semibold text-sm">5612/11-A</h3>
+            <h3 className="font-semibold text-sm">
+              {rideData?.pickup?.split(",")[0] || "Pick-up Location"}
+            </h3>
             <p className="text-xs text-gray-500">
-              Opposite Galaxy Mall, Rajkot - 360001, Gujarat, India
+              {rideData?.pickup || "Pickup location details"}
             </p>
           </div>
         </div>
@@ -100,8 +140,12 @@ function Ridecomplete({ onBack }) {
             <Navigation size={18} className="text-gray-700" />
           </div>
           <div className="ml-3">
-            <h3 className="font-semibold text-sm">1234/56-B</h3>
-            <p className="text-xs text-gray-500">Ahmedabad</p>
+            <h3 className="font-semibold text-sm">
+              {rideData?.destination?.split(",")[0] || "Destination"}
+            </h3>
+            <p className="text-xs text-gray-500">
+              {rideData?.destination || "Destination details"}
+            </p>
           </div>
         </div>
 
@@ -125,16 +169,20 @@ function Ridecomplete({ onBack }) {
         <div className="space-y-2 mb-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Gross Payment</span>
-            <span>₹190.20</span>
+            <span>₹{formatPrice(originalAmount)}</span>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">UPI Discount (9%)</span>
-            <span className="text-green-600">- ₹17.12</span>
-          </div>
+          {discountPercent > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">
+                {paymentMethod.toUpperCase()} Discount ({discountPercent}%)
+              </span>
+              <span className="text-green-600">- ₹{discountAmount}</span>
+            </div>
+          )}
           <div className="border-b border-gray-200 w-full my-2"></div>
           <div className="flex justify-between font-bold">
             <span>Final Payment</span>
-            <span>₹173.08</span>
+            <span>₹{formatPrice(finalAmount)}</span>
           </div>
         </div>
 
@@ -144,7 +192,9 @@ function Ridecomplete({ onBack }) {
             <p className="text-sm font-semibold text-green-800">
               Payment Successful
             </p>
-            <p className="text-xs text-green-600">Paid via UPI</p>
+            <p className="text-xs text-green-600">
+              Paid via {paymentMethod ? paymentMethod.toUpperCase() : "UPI"}
+            </p>
           </div>
         </div>
       </div>

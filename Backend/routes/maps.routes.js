@@ -27,4 +27,13 @@ router.get(
   mapcontrollers.getsuggestion
 );
 
+// Add new route for reverse geocoding
+router.get(
+  "/reverse-geocode",
+  query("lat").isFloat(),
+  query("lng").isFloat(),
+  authmiddleware.authUser,
+  mapcontrollers.reverseGeocode
+);
+
 module.exports = router;
